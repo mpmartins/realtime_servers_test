@@ -1,0 +1,28 @@
+<html>
+<head>
+<script type="text/javascript" src="http://localhost:3000/faye/client.js">
+</script>
+<script type="text/javascript">
+    var client = new Faye.Client('http://localhost:3000/faye', {
+	    timeout: 120,
+	    retry: 5
+	});
+
+	var subscription = client.subscribe('/chat', function(message) {
+	  console.log(message);
+	  client.publish('/chat', {text: message});
+	});
+
+	//subscription.callback(function() {
+	//  console.log('Subscription is now active!');
+	//});
+
+	//subscription.errback(function(error) {
+	//  console.log('Error:' + error.message);
+	//});
+
+</script>
+</head>
+<body>
+</body>
+</html>

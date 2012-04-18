@@ -1,0 +1,35 @@
+<html>
+<head>
+<script type="text/javascript" src="http://localhost:9292/faye/client.js"></script>
+<script type="text/javascript">
+	var count = 0;
+    var time = new Date();
+
+    var client = new Faye.Client('http://localhost:9292/faye');
+
+	var subscription = client.subscribe('/zipplo', function(message) {
+	  console.log(message.text + ' : ' + (new Date() - time) + 'ms');
+
+	  if (count < 10) {
+	    time = new Date();
+	    client.publish('/zipplo', {text: 'ping'});
+	    count++;
+	  }
+
+	});
+
+	subscription.callback(function() {
+	  console.log('Online!');
+	  time = new Date();
+	  client.publish('/zipplo', {text: 'ping'});
+	});
+
+	subscription.errback(function(error) {
+	  console.log('Error:' + error.message);
+	});
+
+</script>
+</head>
+<body>
+</body>
+</html>
